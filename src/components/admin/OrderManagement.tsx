@@ -11,7 +11,7 @@ export const OrderManagement: React.FC = () => {
     // Listen for new orders
     const unsubscribe = useOrders.subscribe((state, prevState) => {
       if (state.orders.length > prevState.orders.length) {
-        toast.info('New order received!');
+        toast.info('New order received, Check Please!');
       }
     });
 
