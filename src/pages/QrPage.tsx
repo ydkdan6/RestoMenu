@@ -1,5 +1,5 @@
 import React from 'react';
-import SessionQRCode from '../components/SessionQRCode';
+import { SessionQRCode } from '../components/SessionQRCode';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 
