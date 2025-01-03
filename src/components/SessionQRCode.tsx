@@ -63,7 +63,7 @@ export const SessionQRCode: React.FC = () => {
       >
         <h2 className="text-2xl font-bold text-center mb-6">Scan to Order</h2>
         
-        <AnimatePresence exitBeforeEnter>
+        <AnimatePresence mode="wait">
           {token ? (
             <motion.div
               key="qr-active"
