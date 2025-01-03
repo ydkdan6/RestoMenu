@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCw } from 'lucide-react';
 import { setSessionToken, getSessionToken, clearSession } from '../utils/sessionManager';
@@ -7,6 +8,7 @@ import { setSessionToken, getSessionToken, clearSession } from '../utils/session
 export const SessionQRCode: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState<number>(0);
+  const navigate = useNavigate();
   
   const initializeSession = () => {
     const newToken = setSessionToken();
@@ -42,9 +44,8 @@ export const SessionQRCode: React.FC = () => {
     return () => clearInterval(timer);
   }, [token]);
   
-  const sessionUrl = token 
-    ? `${window.location.origin}/select-table?token=${token}`
-    : '';
+  const sessionUrl = token ? `/select-table?token=${token}` : '';
+navigate(sessionUrl);
     
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
