@@ -1,95 +1,68 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useOrders } from '../../hooks/useOrders';
-import { Badge } from '../ui/Badge';
-import { toast } from 'react-toastify';
-import { Clock, CheckCircle } from 'lucide-react';
+import { Filter } from 'lucide-react';
+import { OrderCard } from './OrderCard';
 
 export const OrderManagement: React.FC = () => {
   const { orders, updateOrderStatus } = useOrders();
+  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterTable, setFilterTable] = useState<string>('all');
 
-  useEffect(() => {
-    // Listen for new orders
-    const unsubscribe = useOrders.subscribe((state, prevState) => {
-      if (state.orders.length > prevState.orders.length) {
-        toast.info('New order received, Check Please!');
-      }
-    });
+  const filteredOrders = orders.filter(order => {
+    const statusMatch = filterStatus === 'all' ? true : order.status === filterStatus;
+    const tableMatch = filterTable === 'all' ? true : order.tableNumber === filterTable;
+    return statusMatch && tableMatch;
+  });
 
-    return () => unsubscribe();
-  }, []);
-
-  const getStatusColor = (status: string) => {
-    const colors = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      preparing: 'bg-blue-100 text-blue-800',
-      ready: 'bg-green-100 text-green-800',
-      served: 'bg-gray-100 text-gray-800',
-    };
-    return colors[status] || colors.pending;
-  };
+  // Get unique table numbers
+  const tables = Array.from(new Set(orders.map(order => order.tableNumber))).sort();
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6">Order Management</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">Order Management</h2>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Filter className="w-5 h-5 text-gray-600" />
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="border rounded p-2"
+            >
+              <option value="all">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="preparing">Preparing</option>
+              <option value="ready">Ready</option>
+              <option value="served">Served</option>
+            </select>
+            <select
+              value={filterTable}
+              onChange={(e) => setFilterTable(e.target.value)}
+              className="border rounded p-2"
+            >
+              <option value="all">All Tables</option>
+              {tables.map(table => (
+                <option key={table} value={table}>Table {table}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
 
       <div className="grid gap-6">
-        {orders.map((order) => (
-          <div key={order.id} className="bg-white rounded-lg shadow p-6">
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <h3 className="text-lg font-semibold">
-                  Table {order.tableNumber}
-                </h3>
-                <p className="text-sm text-gray-500">
-                  <Clock className="w-4 h-4 inline mr-1" />
-                  {new Date(order.timestamp).toLocaleTimeString()}
-                </p>
-              </div>
-              <Badge className={getStatusColor(order.status)}>
-                {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-              </Badge>
-            </div>
-
-            <div className="space-y-2 mb-4">
-              {order.items.map((item) => (
-                <div key={item.id} className="flex justify-between items-center">
-                  <div>
-                    <span className="font-medium">{item.quantity}x</span> {item.name}
-                    {item.specialNotes && (
-                      <p className="text-sm text-gray-500 ml-6">
-                        Note: {item.specialNotes}
-                      </p>
-                    )}
-                  </div>
-                  <span>${(item.price * item.quantity).toFixed(2)}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex justify-between items-center pt-4 border-t">
-              <div className="space-x-2">
-                <select
-                  value={order.status}
-                  onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                  className="border rounded p-2"
-                >
-                  <option value="pending">Pending</option>
-                  <option value="preparing">Preparing</option>
-                  <option value="ready">Ready</option>
-                  <option value="served">Served</option>
-                </select>
-              </div>
-              <div className="text-green-600 flex items-center gap-2">
-                {order.status === 'ready' && (
-                  <>
-                    <CheckCircle className="w-5 h-5" />
-                    <span className="font-medium">Ready to Serve</span>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
+        {filteredOrders.map((order) => (
+          <OrderCard
+            key={order.id}
+            order={order}
+            onStatusUpdate={updateOrderStatus}
+          />
         ))}
+
+        {filteredOrders.length === 0 && (
+          <div className="text-center py-8 text-gray-500">
+            No orders found for the selected filters
+          </div>
+        )}
       </div>
     </div>
   );
