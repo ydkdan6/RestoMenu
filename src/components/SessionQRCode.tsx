@@ -44,8 +44,9 @@ export const SessionQRCode: React.FC = () => {
     return () => clearInterval(timer);
   }, [token]);
   
-  const sessionUrl = token ? `/select-table?token=${token}` : '';
-navigate(sessionUrl);
+  const sessionUrl = token 
+    ? `${navigate('/select-table?token')}=${token}`
+    : '';
     
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -62,7 +63,7 @@ navigate(sessionUrl);
       >
         <h2 className="text-2xl font-bold text-center mb-6">Scan to Order</h2>
         
-        <AnimatePresence mode="wait">
+        <AnimatePresence exitBeforeEnter>
           {token ? (
             <motion.div
               key="qr-active"
