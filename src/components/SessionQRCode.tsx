@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCw } from 'lucide-react';
 import { setSessionToken, getSessionToken, clearSession } from '../utils/sessionManager';
@@ -8,7 +7,6 @@ import { setSessionToken, getSessionToken, clearSession } from '../utils/session
 export const SessionQRCode: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState<number>(0);
-  const navigate = useNavigate();
   
   const initializeSession = () => {
     const newToken = setSessionToken();
@@ -45,8 +43,10 @@ export const SessionQRCode: React.FC = () => {
   }, [token]);
   
   const sessionUrl = token 
-    ? `${navigate('/select-table?token')}=${token}`
+    ? `${window.location.origin}/select-table?token=${token}`
     : '';
+
+    console.log(sessionUrl);
     
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -55,7 +55,7 @@ export const SessionQRCode: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-6">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
