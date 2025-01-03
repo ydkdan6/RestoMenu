@@ -17,9 +17,9 @@ export const AppRoutes: React.FC = () => {
           <TableSelectionPage />
       } />
       <Route path="/menu" element={
-        <SessionWrapper>
+        
           <MenuPage />
-        </SessionWrapper>
+        
       } />
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin/*" element={
