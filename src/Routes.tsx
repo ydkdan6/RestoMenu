@@ -8,6 +8,7 @@ import { AdminDashboard } from './pages/AdminDashboard';
 import { AdminLogin } from './pages/AdminLogin';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { SessionWrapper } from './components/SessionWrapper';
+import { OrderStatus } from './components/OrderStatus';
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -16,6 +17,11 @@ export const AppRoutes: React.FC = () => {
       <Route path="/select-table" element={
         <SessionWrapper>
           <TableSelectionPage />
+        </SessionWrapper>
+      } />
+      <Route path="/order-status" element={
+        <SessionWrapper>
+          <OrderStatus />
         </SessionWrapper>
       } />
       <Route path="/menu" element={
