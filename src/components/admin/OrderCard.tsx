@@ -39,7 +39,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusUpdate }) =
                 <p className="text-sm text-gray-500 ml-6">Note: {item.specialNotes}</p>
               )}
             </div>
-            <span>${(item.price * item.quantity).toFixed(2)}</span>
+            <span>#{(item.price * item.quantity).toFixed(2)}</span>
           </div>
         ))}
       </div>
@@ -56,7 +56,7 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onStatusUpdate }) =
           <option value="served">Served</option>
         </select>
         <div className="text-lg font-bold">
-          Total: ${order.totalAmount.toFixed(2)}
+          Total: #{order.totalAmount.toFixed(2)}
         </div>
       </div>
     </div>

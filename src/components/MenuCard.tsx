@@ -38,7 +38,7 @@ export const MenuCard: React.FC<MenuCardProps> = ({ item }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="rounded-md bg-gradient-to-br from-[#cacaca] to-[#f0f0f0] shadow-[27px_27px_36px_#a6a6a6,-27px_-27px_36px_#ffffff] overflow-hidden">
       <img
         src={item.imageUrl}
         alt={item.name}

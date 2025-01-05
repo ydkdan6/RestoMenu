@@ -10,7 +10,7 @@ export const HomePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+        <div className="max-w-md mx-auto rounded-[50px] bg-gradient-to-br from-[#cacaca] to-[#f0f0f0] shadow-[27px_27px_36px_#a6a6a6,-27px_-27px_36px_#ffffff] p-6">
           <h1 className="text-2xl font-bold text-center mb-6">
             Welcome to Our Restaurant
           </h1>

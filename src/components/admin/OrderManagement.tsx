@@ -1,12 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useOrders } from '../../hooks/useOrders';
+import { useOrderNotifications } from '../../hooks/useOrderNotifications';
 import { Filter } from 'lucide-react';
 import { OrderCard } from './OrderCard';
+import { toast } from 'react-toastify';
+import { Order } from '../../types';
 
 export const OrderManagement: React.FC = () => {
   const { orders, updateOrderStatus } = useOrders();
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterTable, setFilterTable] = useState<string>('all');
+  const [previousOrders, setPreviousOrders] = useState<Order[]>([]);
+
+  // Initialize order notifications
+  useOrderNotifications();
+
+  // Check for new orders every minute
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newOrders = orders.filter(
+        order => !previousOrders.find(prev => prev.id === order.id)
+      );
+
+      // Show toast for new orders
+      newOrders.forEach(order => {
+        toast.info(`New order from Table ${order.tableNumber}!`, {
+          position: "top-right",
+          autoClose: 5000,
+        });
+      });
+
+      setPreviousOrders(orders);
+    }, 60000); // Check every minute
+
+    return () => clearInterval(interval);
+  }, [orders, previousOrders]);
 
   const filteredOrders = orders.filter(order => {
     const statusMatch = filterStatus === 'all' ? true : order.status === filterStatus;

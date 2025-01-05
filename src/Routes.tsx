@@ -14,12 +14,14 @@ export const AppRoutes: React.FC = () => {
     <Routes>
       <Route path="/qr" element={<QRPage />} />
       <Route path="/select-table" element={
+        <SessionWrapper>
           <TableSelectionPage />
+        </SessionWrapper>
       } />
       <Route path="/menu" element={
-        
+        <SessionWrapper>
           <MenuPage />
-        
+        </SessionWrapper>
       } />
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin/*" element={

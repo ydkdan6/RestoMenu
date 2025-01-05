@@ -1,11 +1,24 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTableStore } from '../stores/tableStore';
+import { getSessionToken } from '../utils/sessionManager';
+import { toast } from 'react-toastify';
 
 export const TableSelectionPage: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const setTableNumber = useTableStore((state) => state.setTableNumber);
+
+  useEffect(() => {
+    const token = searchParams.get('token');
+    const storedToken = getSessionToken();
+
+    if (!token || token !== storedToken) {
+      toast.error('Invalid or expired session');
+      navigate('/qr');
+    }
+  }, [searchParams, navigate]);
 
   const handleTableSelection = (table: string) => {
     setTableNumber(table);

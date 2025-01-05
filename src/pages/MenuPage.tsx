@@ -5,7 +5,7 @@ import { CategoryButton } from '../components/ui/CategoryButton';
 import { CartProvider } from '../context/CartContext';
 import { menuItems } from '../data/menuItems';
 import { Bell, ShoppingCart } from 'lucide-react';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { useTableStore } from '../stores/tableStore';
 import { useNavigate } from 'react-router-dom';
 import { CartSidebar } from '../components/CartSideBar';
@@ -41,6 +41,7 @@ export const MenuPage: React.FC = () => {
           animate={{ y: 0 }}
           className="bg-white shadow-sm sticky top-0 z-10"
         >
+          <ToastContainer />
           <div className="max-w-7xl mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold text-gray-900">Our Menu</h1>
@@ -63,6 +64,7 @@ export const MenuPage: React.FC = () => {
                   className="p-2 text-gray-600 hover:bg-gray-100 rounded-full"
                 >
                   <ShoppingCart className="w-6 h-6" />
+                  <span className='bg-red-500 w-2 h-2 absolute top-6 rounded-full ml-3'></span>
                 </motion.button>
               </div>
             </div>

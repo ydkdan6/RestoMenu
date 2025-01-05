@@ -17,13 +17,13 @@ export const Analytics: React.FC = () => {
     },
     {
       title: 'Total Revenue',
-      value: `$${totalRevenue.toFixed(2)}`,
+      value: `#${totalRevenue.toFixed(2)}`,
       icon: DollarSign,
       color: 'bg-green-500',
     },
     {
       title: 'Average Order Value',
-      value: `$${averageOrderValue.toFixed(2)}`,
+      value: `#${averageOrderValue.toFixed(2)}`,
       icon: BarChart3,
       color: 'bg-purple-500',
     },
