@@ -79,7 +79,7 @@ export const SessionQRCode: React.FC = () => {
                     includeMargin
                   />
 
-                  {/* {console.log(window.location.origin + sessionUrl)}; */}
+                  {console.log(window.location.origin + sessionUrl)};
                 </div>
               </div>
               
