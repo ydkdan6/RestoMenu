@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 
 export const generateToken = (): string => {
-  return Math.random().toString(36).substring(2, 13);
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
 
 export const setSessionToken = () => {
@@ -26,6 +26,11 @@ export const getSessionToken = () => {
   }
   
   return token;
+};
+
+export const validateSession = (token: string | null): boolean => {
+  const storedToken = getSessionToken();
+  return token === storedToken && storedToken !== null;
 };
 
 export const clearSession = () => {

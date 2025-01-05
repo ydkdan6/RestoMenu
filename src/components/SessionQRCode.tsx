@@ -3,7 +3,6 @@ import { QRCodeSVG } from 'qrcode.react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCw } from 'lucide-react';
 import { setSessionToken, getSessionToken, clearSession } from '../utils/sessionManager';
-import { APP_CONFIG } from '../config/constants';
 
 export const SessionQRCode: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -44,7 +43,7 @@ export const SessionQRCode: React.FC = () => {
   }, [token]);
   
   const sessionUrl = token 
-    ? `${window.location.origin}/select-table?token=${token}`
+    ? `/select-table?token=${token}`
     : '';
     
   const formatTime = (seconds: number) => {
@@ -74,7 +73,7 @@ export const SessionQRCode: React.FC = () => {
               <div className="flex justify-center">
                 <div className="p-4 bg-white rounded-lg shadow-inner">
                   <QRCodeSVG
-                    value={sessionUrl}
+                    value={window.location.origin + sessionUrl}
                     size={200}
                     level="H"
                     includeMargin

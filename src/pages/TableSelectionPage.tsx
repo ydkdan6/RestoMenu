@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTableStore } from '../stores/tableStore';
-import { getSessionToken } from '../utils/sessionManager';
+import { validateSession } from '../utils/sessionManager';
 import { toast } from 'react-toastify';
 
 export const TableSelectionPage: React.FC = () => {
@@ -12,9 +12,7 @@ export const TableSelectionPage: React.FC = () => {
 
   useEffect(() => {
     const token = searchParams.get('token');
-    const storedToken = getSessionToken();
-
-    if (!token || token !== storedToken) {
+    if (!validateSession(token)) {
       toast.error('Invalid or expired session');
       navigate('/qr');
     }
