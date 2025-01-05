@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+/**
+ * Custom hook to manage session validity.
+ */
 export const useSession = () => {
   const [isValid, setIsValid] = useState(false);
   const navigate = useNavigate();
@@ -9,24 +12,24 @@ export const useSession = () => {
 
   useEffect(() => {
     const checkSession = () => {
+      const queryParams = new URLSearchParams(location.search);
+      const tokenFromUrl = queryParams.get('token');
       const tokenFromStorage = localStorage.getItem('sessionToken');
       const expiration = localStorage.getItem('tokenExpiration');
 
-      // Check if token exists in storage and is valid
-      if (tokenFromStorage && expiration && Date.now() < parseInt(expiration)) {
+      // Prioritize token from URL query string
+      if (tokenFromUrl) {
+        const newExpiration = Date.now() + 10 * 60 * 1000; // 10 minutes
+        localStorage.setItem('sessionToken', tokenFromUrl);
+        localStorage.setItem('tokenExpiration', newExpiration.toString());
+        console.log('Token from URL processed:', tokenFromUrl);
         setIsValid(true);
         return;
       }
 
-      // Check for token in URL query string
-      const queryParams = new URLSearchParams(location.search);
-      const tokenFromUrl = queryParams.get('token');
-
-      if (tokenFromUrl) {
-        // Save token and expiration (10 minutes from now)
-        const newExpiration = Date.now() + 10 * 60 * 1000;
-        localStorage.setItem('sessionToken', tokenFromUrl);
-        localStorage.setItem('tokenExpiration', newExpiration.toString());
+      // Validate token from localStorage
+      if (tokenFromStorage && expiration && Date.now() < parseInt(expiration)) {
+        console.log('Token from localStorage valid:', tokenFromStorage);
         setIsValid(true);
         return;
       }
@@ -41,9 +44,11 @@ export const useSession = () => {
       localStorage.removeItem('tableNumber');
       setIsValid(false);
       toast.error('Session expired. Please scan the QR code again.');
-      navigate('/qr', { replace: true });
+      // Debounce navigation to avoid race conditions
+      setTimeout(() => navigate('/qr', { replace: true }), 100);
     };
 
+    // Initial check and periodic validation
     checkSession();
     const interval = setInterval(checkSession, 1000);
 
