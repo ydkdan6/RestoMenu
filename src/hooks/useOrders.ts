@@ -17,39 +17,49 @@ export const useOrders = create<OrdersStore>()(
     (set, get) => ({
       orders: [],
 
+      // Add a new order and save it to localStorage
       addOrder: (order) => {
-        set((state) => ({
-          orders: [...state.orders, order],
-        }));
+        set((state) => {
+          const updatedOrders = [...state.orders, order];
+          localStorage.setItem('customerOrders', JSON.stringify(updatedOrders));
+          return { orders: updatedOrders };
+        });
+
+        // Emit a socket event for the new order
         socket.emit('order:new', order);
       },
 
+      // Update the status of an existing order
       updateOrderStatus: (orderId, status) => {
-        set((state) => ({
-          orders: state.orders.map((order) =>
+        set((state) => {
+          const updatedOrders = state.orders.map((order) =>
             order.id === orderId ? { ...order, status } : order
-          ),
-        }));
+          );
+          localStorage.setItem('customerOrders', JSON.stringify(updatedOrders));
+          return { orders: updatedOrders };
+        });
+
+        // Emit a socket event for the updated order status
         socket.emit('order:status', { orderId, status });
       },
 
+      // Fetch orders from localStorage
       fetchOrders: async () => {
         try {
-          const response = await fetch('/api/orders');
-          if (!response.ok) {
-            throw new Error('Failed to fetch orders');
-          }
-          const orders = await response.json();
+          const storedOrders = localStorage.getItem('customerOrders');
+          const orders = storedOrders ? JSON.parse(storedOrders) : [];
           set({ orders });
         } catch (error) {
           console.error('Error fetching orders:', error);
         }
       },
 
+      // Calculate total revenue
       getTotalRevenue: () => {
         return get().orders.reduce((total, order) => total + order.totalAmount, 0);
       },
 
+      // Get count of orders by status
       getOrdersByStatus: () => {
         return get().orders.reduce((acc, order) => {
           acc[order.status] = (acc[order.status] || 0) + 1;
