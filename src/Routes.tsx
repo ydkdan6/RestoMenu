@@ -7,7 +7,7 @@ import { TableSelectionPage } from './pages/TableSelectionPage';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { AdminLogin } from './pages/AdminLogin';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
-import { SessionWrapper } from './components/SessionWrapper';
+// import { SessionWrapper } from './components/SessionWrapper';
 import { OrderStatus } from './components/OrderStatus';
 
 export const AppRoutes: React.FC = () => {
