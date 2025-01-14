@@ -15,19 +15,19 @@ export const AppRoutes: React.FC = () => {
     <Routes>
       <Route path="/qr" element={<QRPage />} />
       <Route path="/select-table" element={
-        <SessionWrapper>
+        // <SessionWrapper>
           <TableSelectionPage />
-        </SessionWrapper>
+        // </SessionWrapper>
       } />
       <Route path="/order-status" element={
-        <SessionWrapper>
+        // <SessionWrapper>
           <OrderStatus />
-        </SessionWrapper>
+        // </SessionWrapper>
       } />
       <Route path="/menu" element={
-        <SessionWrapper>
+        // <SessionWrapper>
           <MenuPage />
-        </SessionWrapper>
+        // </SessionWrapper>
       } />
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin/*" element={

@@ -42,9 +42,17 @@ export const SessionQRCode: React.FC = () => {
     return () => clearInterval(timer);
   }, [token]);
   
-  const sessionUrl = token 
-    ? `/select-table?token=${token}`
-    : '';
+  // Get the base URL for the deployed site
+  const getBaseUrl = () => {
+    // For Vercel deployments
+    if (true ){
+      return `https://resto-menu-indol.vercel.app/`;
+    }
+    // Fallback to current origin
+    return window.location.origin;
+  };
+  
+  const sessionUrl = `${window.location.origin}}/select-table`;
     
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -73,13 +81,11 @@ export const SessionQRCode: React.FC = () => {
               <div className="flex justify-center">
                 <div className="p-4 bg-white rounded-lg shadow-inner">
                   <QRCodeSVG
-                    value={window.location.origin + sessionUrl}
+                    value={sessionUrl}
                     size={200}
                     level="H"
                     includeMargin
                   />
-
-                  {console.log(window.location.origin + sessionUrl)}
                 </div>
               </div>
               
